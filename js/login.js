@@ -1,6 +1,9 @@
 $(function() {
   var socket = io.connect();
 
+  if($.cookie("ID"))
+    window.location.href = "index.html";
+
   $('#login-button').click(function() {
     var id   = $('#id').val();
     var pass = $('#pass').val();
@@ -11,8 +14,10 @@ $(function() {
     });
 
     socket.on('reply login', function(data) {
-      if(data)
-        alert("ログインに成功しました");
+      if(data){
+	$.cookie("ID", id, { expires: 7 });
+	window.location.href = "index.html";
+      }
       else
         alert("IDまたはパスワードが間違っています");
     });

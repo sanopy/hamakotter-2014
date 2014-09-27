@@ -1,7 +1,6 @@
 var fs       = require('fs');
 var http     = require('http');
 var crypto   = require('crypto');
-var express  = require('express');
 var mongoose = require('mongoose');
 var socketio = require('socket.io');
 var settings = require('./settings.js');
@@ -14,16 +13,16 @@ mongoose.connect('mongodb://' + settings.host + '/' + settings.db);
 /* DBに登録するデータ型の定義 */
 var Schema = mongoose.Schema;
 var TweetSchema = new Schema({
-	id:   String,
-	msg:  String,
-	name: String,
-	time: Date
+  id:   String,
+  msg:  String,
+  name: String,
+  time: Date
 });
 
 var UserSchema = new Schema({
-	id:       String,
-	name:     String,
-	password: String
+  id:       String,
+  name:     String,
+  password: String
 });
 
 mongoose.model('Tweet', TweetSchema);
@@ -41,7 +40,7 @@ function handler(req, res){
 
   console.log(uri);
 
-	// 拡張子の取得
+  /* 拡張子の取得 */
   var splits = uri.split('.');
   var extension = splits[splits.length - 1];
 
@@ -69,8 +68,15 @@ function handler(req, res){
 }
 
 /* サーバ・クライアント間の通信 */
+var access = 0;
 var io = socketio.listen(server, {'log level': 2});
 io.sockets.on('connection', function(socket) {
+  /* アクセスカウンター */
+  io.sockets.emit('count update', ++access);
+  socket.on('disconnect', function() {
+    io.sockets.emit('count update', --access);
+  });
+
   socket.on('msg update', function() {
     Tweet.find(function(err, docs){
       socket.emit('msg open', docs);
