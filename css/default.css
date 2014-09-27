@@ -1,0 +1,85 @@
+body {
+     background-color: #FCFCFC;
+}
+.navbar-default{
+    background-color:#000088 !important;
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus
+{
+    color: #FFFFFF !important;
+}
+
+.footerBtn{
+    text-align: center !important;
+    position:relative !important;
+}
+.footerBtn a{
+    display: block;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    height: 100%;
+    color: #FFFFFF !important;
+}
+.selected{
+    background-color: #222222 !important;
+    text-decoration: none !important;
+}
+
+.footerBtn:hover,
+.footerBtn:focus{
+	background-color: #222222 !important;
+	text-decoration: none !important;
+}
+
+.container .btn-group
+{
+    max-width: 550px;
+    margin: 0 auto !important;
+}
+.container .tweet{
+    max-width: 750px;
+    margin: 0 auto !important;
+}
+.container .media{
+    max-width: 600px;
+    margin: 0 auto !important;
+}
+
+.container .tweet{
+/*
+    background-color: #003333;
+    color: #FFFFFF;
+*/
+
+    border-bottom: 1px solid #CCCCCC;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+.container .tweet .tweet-footer{
+    padding-top: 3px;
+    padding-bottom: 0;
+}
+.left{
+    color: #888888;
+    margin-left: 10px !important;
+    text-align: left;
+}
+.right{
+    text-align: right;
+    margin-right: 10px !important;
+}
+
+
+.message{
+    display: none;
+}
+
+@media (min-width: 500px){ /*日付となんとかボタンの改行の有無 */
+    .left{
+	float: left;
+    }
+}
