@@ -27,17 +27,17 @@
     <div class="container">
       <div class="col-xs-12">
 	<div class="thumbnail">
-	  <img src="img/sanopi.jpeg" style="min-height: 100px; max-height: 150px;">
+	  <img id="userIcon" style="min-height: 100px; max-height: 150px;">
 	  <div class="caption">
-	    <h4 align="center">かっこいいうおおさん</h4>
-	    <div class="right" style="margin-right:10% !important;">@uoo38</div>
+	    <h4 id="userName" align="center"></h4>
+	    <div id="userID" class="right" style="margin-right:10% !important;"></div>
 	  </div>
 
 	  <div class="row" align="center">
-	    <div class="col-xs-4">
+	    <div id="tweetNum" class="col-xs-4">
 	      ついーと
 	    </div>
-	    
+
 	    <div class="col-xs-4">
 	      ふぁぼ
 	    </div>
@@ -47,123 +47,8 @@
 	  </div>
 	  <hr>
 
-	  <div class="tweet">
-	    <div class="tweet-body">
-	      <div class="media">
-		<a class="pull-left">
-		  <img class="media-object" src="img/sanopi.jpeg" alt="" width="75">
-		</a>
-		<div class="media-body">
-		  <h4 class="media-heading"><strong>うおおさん</strong>@uoo38</h4>
-		  <p><u>@div9851</u> でぃぶちょくどうですか</p>
-		  
-		  <div class="tweet-footer">
-		    <div class="left">
-		      2014年9月25日 - 5:42pm
-		    </div>
-		    <div class="right">
-		      <a class="favo">ふぁぼ</a>
-		      <a class="reply">返信</a>
-		    </div>
-		    <div class="message">
-		      <div class="modal-body" method="get">
-			<textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>
-		      </div>
-
-		      <div class="modal-footer">
-			<span>
-			  140 <!-- 文字数制限 -->
-			</span>
-			<button type="button" class="btn btn-default" data-dismiss="modal">返信</button>
-		      </div> <!--ここらへんでぃぶでぃぶしてる -->
-		    </div>
-		  </div>
-		</div>
-	      </div>
-	    </div>
+	  <div id="logs">
 	  </div>
-
-
-	  <div class="tweet">
-	    <div class="tweet-body">
-	      <div class="media">
-		<a class="pull-left">
-		  <img class="media-object" src="img/sanopi.jpeg" alt="" width="75">
-		</a>
-		<div class="media-body">
-		  <h4 class="media-heading"><strong>うおおさん</strong>@uoo38</h4>
-		  <p><u>@ei1333</u> あっ嬉しい</p>
-		  
-		  <div class="tweet-footer">
-		    <div class="left">
-		      2014年9月25日 - 4:25pm
-		    </div>
-		    <div class="right">
-		      <a class="favo">ふぁぼ</a>
-		      <a class="reply">返信</a>
-		    </div>
-		    <div class="message">
-		      <div class="modal-body" method="get">
-			<textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>
-		      </div>
-
-		      <div class="modal-footer">
-			<span>
-			  140 <!-- 文字数制限 -->
-			</span>
-			<button type="button" class="btn btn-default" data-dismiss="modal">返信</button>
-		      </div> <!--ここらへんでぃぶでぃぶしてる -->
-		    </div>
-		  </div>
-		</div>
-	      </div>
-	    </div>
-	  </div>
-
-	  <div class="tweet">
-	    <div class="tweet-body">
-	      <div class="media">
-		<a class="pull-left">
-		  <img class="media-object" src="img/sanopi.jpeg" alt="" width="75">
-		</a>
-		<div class="media-body">
-		  <h4 class="media-heading"><strong>うおおさん</strong>@uoo38</h4>
-		  <p><u>@ei1333</u> 受かりました</p>
-		  
-		  <div class="tweet-footer">
-		    <div class="left">
-		      2014年9月25日 - 4:23pm
-		    </div>
-		    <div class="right">
-		      <a class="favo">ふぁぼ</a>
-		      <a class="reply">返信</a>
-		    </div>
-		    <div class="message">
-		      <div class="modal-body" method="get">
-			<textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>
-		      </div>
-
-		      <div class="modal-footer">
-			<span>
-			  140 <!-- 文字数制限 -->
-			</span>
-			<button type="button" class="btn btn-default" data-dismiss="modal">返信</button>
-		      </div> <!--ここらへんでぃぶでぃぶしてる -->
-		    </div>
-		  </div>
-		</div>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-      </div>
-    </div>
-
-
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="navbar-inner">
-	<div class="container">
-	  <a class="navbar-brand" href="index.html">Hamakotter</a>
 	</div>
       </div>
     </div>
@@ -174,7 +59,7 @@
 	  <div class="col-xs-4 footerBtn">
 	    <a href="index.html">ホーム</a>
 	  </div>
-	  
+
 	  <div class="col-xs-4 footerBtn">
 	    <a href="notice.html">通知
 	      <span class="badge">42</span>
@@ -191,8 +76,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="css/library/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/user.js"></script>
     <script src="js/select.js"></script>
     <script src="js/strcount.js"></script>
+    <script src="js/accesscounter.js"></script>
   </body>
 </html>
 

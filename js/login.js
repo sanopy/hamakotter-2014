@@ -1,7 +1,7 @@
 $(function() {
   var socket = io.connect();
 
-  if($.cookie("ID"))
+  if($.cookie("ID") && $.cookie("name"))
     window.location.href = "index.html";
 
   $('#login-button').click(function() {
@@ -15,7 +15,8 @@ $(function() {
 
     socket.on('reply login', function(data) {
       if(data){
-	$.cookie("ID", id, { expires: 7 });
+	$.cookie(  "ID",        id, { expires: 7 });
+	$.cookie("name", data.name, { expires: 7 });
 	window.location.href = "index.html";
       }
       else

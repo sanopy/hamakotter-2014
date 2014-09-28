@@ -44,11 +44,19 @@ function handler(req, res){
   var splits = uri.split('.');
   var extension = splits[splits.length - 1];
 
-  if(extension == 'jpeg' || extension == 'jpg'){
+  if(extension == 'jpeg' || extension == 'jpg' || extension == 'png'){
     fs.readFile(uri, function(err, data) {
-      res.writeHead(200);
-      res.write(data);
-      res.end();
+      if(err){
+	fs.readFile('./img/img-notfound.png', function(err, data) {
+	  res.writeHead(500);
+	  res.write(data);
+	  res.end();
+	});
+      } else {
+	res.writeHead(200);
+	res.write(data);
+	res.end();
+      }
     });
   } else {
     fs.readFile(uri, 'utf-8', function(err, data) {
@@ -84,7 +92,7 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('send msg', function(data) {
-    io.sockets.json.emit('push msg', data);
+    io.sockets.emit('push msg', data);
 
     var tweet  = new Tweet();
     tweet.id   = data.id;
@@ -98,10 +106,10 @@ io.sockets.on('connection', function(socket) {
     });
   });
   socket.on('create user', function(data) {
-    User.find({id: data.id}, function(err, docs) {
-      socket.emit('reply create user', docs.length);
+    User.findOne({id: data.id}, function(err, doc) {
+      socket.emit('reply create user', doc);
 
-      if(docs.length == 0){
+      if(!doc){
         var md5 = crypto.createHash('md5');
         md5.update(data.password);
 
@@ -127,8 +135,14 @@ io.sockets.on('connection', function(socket) {
       {id: data.id},
       {password: pass}
     ]};
-    User.find(query, function(err, docs) {
-      socket.emit('reply login', docs.length);
+    User.findOne(query, function(err, doc) {
+      socket.emit('reply login', doc);
+    });
+  });
+
+  socket.on('user tweet', function(data) {
+    Tweet.find({id: data}, function(err, docs) {
+      socket.emit('reply user tweet', docs);
     });
   });
 });

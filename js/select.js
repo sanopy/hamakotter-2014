@@ -1,6 +1,5 @@
 $(function() {
   $('.favo').click( function() {
-    console.log("foo");
     if( $(this).css("color") != "rgb(255, 140, 0)" ){
       $(this).text("ふぁぼ済み");
       $(this).css( 'color' ,'#FF8C00' );
@@ -12,7 +11,14 @@ $(function() {
   } );
 
   $('.reply').click( function() {
-    console.log("foo!!");
+    if(!$.cookie("ID") || !$.cookie("name"))
+      window.location.href = "login.html";
+
     $(this).parent().parent().children(".message").slideToggle();
   } );
+
+  $('#tweetbutton').click( function() {
+    if(!$.cookie("ID") || !$.cookie("name"))
+      window.location.href = "login.html";
+  });
 });
