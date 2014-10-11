@@ -16,7 +16,8 @@ var TweetSchema = new Schema({
   id:   String,
   msg:  String,
   name: String,
-  time: Date
+  time: Date,
+  favo: []
 });
 
 var UserSchema = new Schema({
@@ -86,19 +87,21 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('msg update', function() {
-    Tweet.find(function(err, docs){
+    Tweet.where().sort({'time':'asc'}).exec(function(err, docs) {
       socket.emit('msg open', docs);
     });
   });
 
   socket.on('send msg', function(data) {
-    io.sockets.emit('push msg', data);
 
     var tweet  = new Tweet();
     tweet.id   = data.id;
     tweet.msg  = data.msg;
     tweet.name = data.name;
     tweet.time = data.time;
+    tweet.favo = [];
+
+    io.sockets.emit('push msg', tweet);
 
     tweet.save(function(err) {
       if(err)
@@ -140,9 +143,87 @@ io.sockets.on('connection', function(socket) {
     });
   });
 
-  socket.on('user tweet', function(data) {
+  socket.on('user status', function(data) { /* ユーザーのふぁぼ・ついーと数を取得 */
+    var tweet;
+    var favo;
+    
     Tweet.find({id: data}, function(err, docs) {
+      tweet = docs.length;
+
+      Tweet.find({favo: { $in:[data] } }, function(err, docs) {
+	favo = docs.length;
+
+
+	socket.json.emit('reply user status', {
+	  tweet: tweet,
+	  favo:  favo
+	});
+      });
+    });
+  });
+
+  socket.on('user tweet', function(data) { /* ユーザーのついーとを取得 */
+    Tweet.where({id: data}).sort({'time':'asc'}).exec(function(err, docs) {
       socket.emit('reply user tweet', docs);
+    });
+  });
+
+  socket.on('user favo', function(data) { /* ユーザーのふぁぼを取得 */
+    Tweet.where({favo: { $in:[data] } }).sort({'time':'asc'}).exec(function(err, docs) {
+      socket.emit('reply user favo', docs);
+    });
+  });
+
+  socket.on('favo', function(data) { /* ふぁぼられた時の処理 */
+    var query = {'$and':[
+      {id: data.target},
+      {time: data.date}
+    ]};
+    Tweet.findOne(query, function(err, doc) { /* ユーザーがそのついーとを既にふぁぼっているか */
+      if(doc.favo.indexOf(data.id) == -1) /* ふぁぼってなかった */
+	doc.favo.push(data.id);
+      else{ /* ふぁぼってた */
+	for(var i = 0;i < doc.favo.length; i++){
+	  if(doc.favo[i] == data.id){
+	    doc.favo.splice(i, 1);
+	    break;
+	  }
+	}
+      }
+
+      var tweet  = new Tweet();
+      //tweet._id  = doc._id;
+      tweet.id   = doc.id;
+      tweet.msg  = doc.msg;
+      tweet.name = doc.name;
+      tweet.time = doc.time;
+      tweet.favo = doc.favo;
+
+      /* ついーと情報を更新 */
+      Tweet.remove(query, function(err) {
+	if(err)
+	  console.log(err);
+      });
+      tweet.save(function(err) {
+	if(err)
+	  console.log(err);
+      });
+    });
+  });
+
+  socket.on('tweetRemove', function(data) {
+    var query = {'$and':[
+      {id: data.id},
+      {time: data.date}
+    ]};
+
+    Tweet.remove(query, function(err) {
+      if(err)
+	console.log(err);
+    });
+
+    Tweet.find(function(err, docs) {
+      io.sockets.emit('msg open', docs);
     });
   });
 });

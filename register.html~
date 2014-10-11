@@ -19,19 +19,19 @@
     <!-- ヘッダーとフッダー -->
     <link href="css/footer-navbar.css" rel="stylesheet">
     <link href="css/default.css" rel="stylesheet">
-    <link href="css/login.css" rel="stylesheet">
+    <link href="css/register.css" rel="stylesheet">
   </head>
   <body>
 
     <div class="container">
       <form class="form-signin" role="form"> <!-- ここらへんさのぴーさん -->
-	<h2 class="form-signin-heading">ログイン</h2>
-	<input type="name" class="form-control" id="id" placeholder="User Name" required>
-        <input type="password" class="form-control" id="pass" placeholder="Password" required>
+	<h2 class="form-signin-heading">登録</h2>
+	<input type="name" class="form-control" placeholder="User Name" required autofocs id="name">
+	<input type="name" class="form-control" placeholder="User Id" required id="id">
+	<input type="password" class="form-control" placeholder="Password" required id="pass1">
+        <input type="password" class="form-control" placeholder="Confirm Password" required id="pass2">
 	<hr>
-	<button class="btn btn-lg btn-primary btn-block" type="button" id="login-button">ログイン</button>
-	<br>
-	<a href="register.html">Register</a>
+	<button class="btn btn-lg btn-primary btn-block" type="button" id="register-button">登録</button>
       </form>
     </div>
 
@@ -47,17 +47,9 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script>
-      $("#pass").keydown(function(e) {
-        var c = e.which ? e.which : e.keyCode;
-        if(c == 13){
-          $("#login-button").click();
-        }
-      });
-    </script>
     <script src="css/library/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/jquery.cookie.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/login.js"></script>
+    <script src="js/register.js"></script>
   </body>
 </html>
+

@@ -2,11 +2,11 @@ body {
      background-color: #FCFCFC;
 }
 .navbar-default{
-    background-color: #660000;
+    background-color:#c9171e !important;
 }
 
 .btn-primary{
-    background-color: #cc0000 !important;
+    background-color: #ee827c !important;
     border: none;
 }
 

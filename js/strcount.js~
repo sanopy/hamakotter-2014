@@ -1,5 +1,5 @@
 $(function() {
-  $(document).on("keyup keydown onblur", '.form-control', function() {
+  $('.form-control').on( "keyup keydown onblur", function() {
     /*"change"/*keyup', fucnction() {*/
     var len = 140 - $(this).val().length;
     $(this).parent().parent().children(".modal-footer").children(".char-count").text(len);

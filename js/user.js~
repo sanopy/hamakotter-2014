@@ -1,33 +1,60 @@
 $(function() {
   var socket = io.connect();
 
-  $('#logout').click(function() {
-    $.removeCookie("ID");
-    $.removeCookie("name");
+  var id   = $.cookie("ID");
+  var name = $.cookie("name");
+  if(!id || !name)
     window.location.href = "login.html"
-  });
 
-  if(!$.cookie("ID") || !$.cookie("name"))
-    window.location.href = "login.html";
+  $('#userIcon').attr({src: 'img/' + id + '.jpeg'});
+  $('#userName').text(name);
+  $('#userID').text('@' + id);
 
   socket.on('connect', function() {
-    socket.emit('msg update');
+    socket.emit('user tweet', id);
+    socket.emit('user status', id);
   });
 
-  socket.on('msg open', function(data) {
+  $('#tweetNum').click(function() {
+    socket.emit('user tweet', id);
+  });
+
+  $('#favoNum').click(function() {
+    socket.emit('user favo', id);
+  });
+
+  socket.on('reply user status', function(data) {
+    console.log(data);
+    $('#tweetNum').text(data.tweet + 'ついーと');
+    $('#favoNum').text(data.favo + 'ふぁぼ');
+  });
+
+  socket.on('reply user tweet', function(data) {
     $('#logs').empty();
     $.each(data, function(key, value) {
       value.msg = $("<div/>").text(value.msg).html();
       value.msg = value.msg.replace(/\n/g, '<br>');
       $('#logs').prepend(formatTweet(value));
     });
+    
+    var ele = document.createElement("script");
+    ele.src = "js/select.js";
+    document.body.appendChild(ele);
   });
-  
-  socket.on('push msg', function(data) {
-    data.msg = $("<div/>").text(data.msg).html();
-    data.msg = data.msg.replace(/\n/g, '<br>');
-    $('#logs').prepend(formatTweet(data));
+
+  socket.on('reply user favo', function(data) {
+    $('#logs').empty();
+    $.each(data, function(key, value) {
+      value.msg = $("<div/>").text(value.msg).html();
+      value.msg = value.msg.replace(/\n/g, '<br>');
+      $('#logs').prepend(formatTweet(value));
+    });
+    
+    var ele = document.createElement("script");
+    ele.src = "js/select.js";
+    document.body.appendChild(ele);
   });
+
 });
 
 function formatDate(date) {
@@ -40,10 +67,12 @@ function formatDate(date) {
 }
 
 function color(data) {
+  console.log(data.favo);
   if(data.favo.indexOf($.cookie("ID")) != -1)
     return 'style="color: rgb(255, 140, 0)">ふぁぼ済み';
   else
     return 'style="color: rgb( 42, 100, 150 )">ふぁぼ';
+
 }
 
 function replyURL(data) {

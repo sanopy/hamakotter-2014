@@ -18,12 +18,9 @@ body {
  /* background-color: #0000EE; */
 }
 
-@media(min-width: 500px){
-    .navbar .navbar-brand{
-	font-size: 30px;
-    }
+.navbar .navbar-brand{
+    font-size: 30px;
 }
-
 
 body > .container {
   padding: 60px 15px 0;

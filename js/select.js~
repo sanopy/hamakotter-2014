@@ -24,7 +24,7 @@ $(function() {
 
     $(this).parent().parent().children('.modal-body').children('.form-control').val('');
     //$(this).parent().parent().slideToggle();
-  }).css('cursor', 'pointer'); // iPhone でクリックを認識するためのおまじない
+  });
 
   $(document).on('click', '.favo', function() {
     if(!$.cookie("ID") || !$.cookie("name"))
@@ -49,7 +49,7 @@ $(function() {
       date: date,
       target: target.substr(target.lastIndexOf('@') + 1)
     });
-  }).css('cursor', 'pointer');
+  });
 
   $(document).on('click', '.reply', function() {
     if(!$.cookie("ID") || !$.cookie("name"))
@@ -76,5 +76,5 @@ $(function() {
       });
     }
 
-  }).css('cursor', 'pointer');
+  });
 });

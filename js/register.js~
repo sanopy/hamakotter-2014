@@ -7,9 +7,7 @@ $(function() {
     var pass1 = $('#pass1').val();
     var pass2 = $('#pass2').val();
 
-    if(id.match(/[a-zA-Z0-9_]+/) != id){
-      alert("IDが不正です");
-    } else if(pass1 != pass2) {
+    if(pass1 != pass2){
       $('#pass1').val("");
       $('#pass2').val("");
       alert("パスワードが一致しません!");
