@@ -6,13 +6,8 @@ $(function() {
   if(!id || !name)
     window.location.href = "login.html"
 
-  $('#userIcon').attr({src: 'img/' + id + '.jpeg'});
-  $('#userName').text(name);
-  $('#userID').text('@' + id);
-
   socket.on('connect', function() {
     socket.emit('user tweet', id);
-    socket.emit('user status', id);
   });
 
   $('#tweetNum').click(function() {
@@ -29,12 +24,6 @@ $(function() {
     $('#tweetNum').parent().removeClass('selected');
   });
 
-  socket.on('reply user status', function(data) {
-    console.log(data);
-    $('#tweetNum').text(data.tweet + 'ついーと');
-    $('#favoNum').text(data.favo + 'ふぁぼ');
-  });
-
   socket.on('reply user tweet', function(data) {
     $('#logs').empty();
     $.each(data, function(key, value) {
@@ -42,10 +31,6 @@ $(function() {
       value.msg = value.msg.replace(/\n/g, '<br>');
       $('#logs').prepend(formatTweet(value));
     });
-    
-    var ele = document.createElement("script");
-    ele.src = "js/select.js";
-    document.body.appendChild(ele);
   });
 
   socket.on('reply user favo', function(data) {
@@ -55,12 +40,7 @@ $(function() {
       value.msg = value.msg.replace(/\n/g, '<br>');
       $('#logs').prepend(formatTweet(value));
     });
-    
-    var ele = document.createElement("script");
-    ele.src = "js/select.js";
-    document.body.appendChild(ele);
   });
-
 });
 
 function formatDate(date) {
@@ -85,17 +65,16 @@ function replyURL(data) {
   var id = $.cookie("ID");
 
   if(id == data)
-    return '       	        <a class="remove">つい消し</a>\n';
+    return '       	        <a class="remove" onclick="">つい消し</a>\n';
   else
     return '';
 }
-
 
 function formatTweet(data) {
 
   var link = '/users/' + data.id;
 
-  var html = '    <div class="tweet">\n	  <div class="tweet-body">\n	    <div class="media">\n	      <a class="pull-left">\n		    <img class="media-object" src="img/' + data.id + '.jpeg" alt="" width="75">\n	      </a>\n	      <div class="media-body">\n		    <h4 class="media-heading"><a href="'+ link + '"><strong>' + data.name + '</strong>@' + data.id + '</a></h4>\n		    <p>' + data.msg + '</p>\n		    <p class="tweetinfo">' + data.time + '</p>\n		    <div class="tweet-footer">\n		      <div class="left">' + formatDate(data.time) +	 '</div>\n		      <div class="right">\n	            <a class="favo" ' + color(data) + '</a>\n       	        <a class="reply">返信</a>\n' + replyURL(data.id) + '		      </div>\n	    	  <div class="message">\n	  	        <div class="modal-body" method="get">\n		          <textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>\n		        </div>\n  		        <div class="modal-footer">\n		          <span class="char-count">140</span>\n       	          <button type="button" class="btn btn-default" data-dismiss="modal">返信</button>\n	  	        </div>\n		      </div>\n	         </div>\n	      </div>\n	    </div>\n	  </div>\n    </div>\n';
+  var html = '    <div class="tweet">\n	  <div class="tweet-body">\n	    <div class="media">\n	      <a class="pull-left">\n		    <img class="media-object" src="img/' + data.id + '.jpeg" alt="" width="75">\n	      </a>\n	      <div class="media-body">\n		    <h4 class="media-heading"><a href="'+ link + '"><strong>' + data.name + '</strong>@' + data.id + '</a></h4>\n		    <p>' + data.msg + '</p>\n		    <p class="tweetinfo">' + data.time + '</p>\n		    <div class="tweet-footer">\n		      <div class="left">' + formatDate(data.time) +	 '</div>\n		      <div class="right">\n	            <a class="favo" onclick="" ' + color(data) + '</a>\n       	        <a class="reply" onclick="">返信</a>\n' + replyURL(data.id) + '		      </div>\n	    	  <div class="message">\n	  	        <div class="modal-body" method="get">\n		          <textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>\n		        </div>\n  		        <div class="modal-footer">\n		          <span class="char-count">140</span>\n       	          <button type="button" class="btn btn-default" data-dismiss="modal">返信</button>\n	  	        </div>\n		      </div>\n	         </div>\n	      </div>\n	    </div>\n	  </div>\n    </div>\n';
 
   return html;
 }

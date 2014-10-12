@@ -24,7 +24,7 @@ $(function() {
 
     $(this).parent().parent().children('.modal-body').children('.form-control').val('');
     //$(this).parent().parent().slideToggle();
-  }).css('cursor', 'pointer'); // iPhone ‚ÅƒNƒŠƒbƒN‚ğ”F¯‚·‚é‚½‚ß‚Ì‚¨‚Ü‚¶‚È‚¢
+  });
 
   $(document).on('click', '.favo', function() {
     if(!$.cookie("ID") || !$.cookie("name"))
@@ -49,7 +49,7 @@ $(function() {
       date: date,
       target: target.substr(target.lastIndexOf('@') + 1)
     });
-  }).css('cursor', 'pointer');
+  });
 
   $(document).on('click', '.reply', function() {
     if(!$.cookie("ID") || !$.cookie("name"))
@@ -60,13 +60,13 @@ $(function() {
 
     $(this).parent().parent().children(".message").children(".modal-body").children(".form-control").val(id + " ");
     $(this).parent().parent().children(".message").slideToggle();
-  } );
+  });
 
   $(document).on('click', '.remove', function() {
     if(!$.cookie("ID") || !$.cookie("name"))
       window.location.href = "login.html";
     
-    if(confirm('æœ¬å½“ã«ã¤ã„æ¶ˆã—ã—ã¦ã„ã„ã§ã™ã‹')){
+    if(confirm('æœ¬å½“ã«ã¤ã„æ¶ˆã—ã™ã‚‹ã‚ˆ?')){
       var id   = $.cookie("ID");
       var date = $(this).parent().parent().parent().children('.tweetinfo').text();
       
@@ -76,5 +76,5 @@ $(function() {
       });
     }
 
-  }).css('cursor', 'pointer');
+  });
 });

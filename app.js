@@ -1,6 +1,8 @@
 var fs       = require('fs');
+var ejs      = require('ejs');
 var http     = require('http');
 var crypto   = require('crypto');
+var cookie   = require('cookie');
 var mongoose = require('mongoose');
 var socketio = require('socket.io');
 var settings = require('./settings.js');
@@ -33,6 +35,9 @@ var Tweet = mongoose.model('Tweet');
 var User  = mongoose.model('User');
 /* ここまで */
 
+/* ejsテンプレートの読み込み */
+var userFile = fs.readFileSync('./user.ejs', 'utf8');
+
 /* HTMLファイル 読み込み */
 function handler(req, res){
   var uri = '.' + req.url;
@@ -45,21 +50,57 @@ function handler(req, res){
   var splits = uri.split('.');
   var extension = splits[splits.length - 1];
 
-  if(extension == 'jpeg' || extension == 'jpg' || extension == 'png'){
+  /*ユーザーページのリクエスト処理  */
+  if(uri == './user.html'){
+    var cookies = cookie.parse(req.headers.cookie);
+    var ID = cookies.ID;
+    var name, tweet, favo;
+    
+    User.findOne({id: ID}, function(err, doc) {
+      if(err)
+	console.log(err);
+      
+      /* User Name を取得 */
+      name = doc.name;
+
+      /* ツイート数を取得 */
+      Tweet.find({id: ID}, function(err, docs) {
+	tweet = docs.length;
+	/* ふぁぼ数を取得 */
+	Tweet.find({favo: { $in:[ID] } }, function(err, docs) {
+	  favo = docs.length;
+	  
+	  var userData = ejs.render(userFile, {
+	    userIcon: './img/' + ID + '.jpeg',
+	    userName: name,
+	    userID:   '@' + ID,
+	    tweetNum: tweet + ' ついーと',
+	    favoNum:  favo + ' ふぁぼ'
+	  });
+	  res.writeHead(200, {'Content-Type': 'text/html'});
+	  res.write(userData);
+	  res.end();
+	});
+      });
+    });
+  }
+  /* 画像ファイルのリクエスト処理 */
+  else if(extension == 'jpeg' || extension == 'jpg' || extension == 'png'){
     fs.readFile(uri, function(err, data) {
       if(err){
 	fs.readFile('./img/img-notfound.png', function(err, data) {
 	  res.writeHead(500);
 	  res.write(data);
 	  res.end();
-	});
+	});2
       } else {
 	res.writeHead(200);
 	res.write(data);
 	res.end();
       }
     });
-  } else {
+  } 
+  else {
     fs.readFile(uri, 'utf-8', function(err, data) {
       if(err){
         fs.readFile('./notfound.html', 'utf-8', function(err, data) {
@@ -180,7 +221,11 @@ io.sockets.on('connection', function(socket) {
       {time: data.date}
     ]};
     Tweet.findOne(query, function(err, doc) { /* ユーザーがそのついーとを既にふぁぼっているか */
-      if(doc.favo.indexOf(data.id) == -1) /* ふぁぼってなかった */
+      if(doc == null){ /* ついーと情報がない */
+	console.log("err: Nothing tweet");
+	return;
+      }
+      else if(doc.favo.indexOf(data.id) == -1) /* ふぁぼってなかった */
 	doc.favo.push(data.id);
       else{ /* ふぁぼってた */
 	for(var i = 0;i < doc.favo.length; i++){
@@ -203,10 +248,11 @@ io.sockets.on('connection', function(socket) {
       Tweet.remove(query, function(err) {
 	if(err)
 	  console.log(err);
-      });
-      tweet.save(function(err) {
-	if(err)
-	  console.log(err);
+	
+	tweet.save(function(err) {
+	  if(err)
+	    console.log(err);
+	});
       });
     });
   });

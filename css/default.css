@@ -83,12 +83,12 @@ body {
     display: none;
 }
 
-.tweetinfo { /* ±£¤·Í×ÁÇ */
+.tweetinfo { /* éš ã—è¦ç´  */
     display: none !important;
 }
 
 
-@media (min-width: 500px){ /*ÆüÉÕ¤È¤Ê¤ó¤È¤«¥Ü¥¿¥ó¤Î²ş¹Ô¤ÎÍ­Ìµ */
+@media (min-width: 500px){ /*æ—¥ä»˜ã¨ãªã‚“ã¨ã‹ãƒœã‚¿ãƒ³ã®æ”¹è¡Œã®æœ‰ç„¡ */
     .left{
 	float: left;
     }
