@@ -1,14 +1,10 @@
 $(function() {
   var socket = io.connect();
 
-  $('#logout').click(function() {
-    $.removeCookie("ID");
-    $.removeCookie("name");
-    window.location.href = "login.html"
-  });
-
+  /*
   if(!$.cookie("ID") || !$.cookie("name"))
     window.location.href = "login.html";
+   */
 
   socket.on('connect', function() {
     socket.emit('msg update');

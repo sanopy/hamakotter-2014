@@ -10,7 +10,7 @@
     <title>はまこったー</title>
 
     <!-- Bootstrap -->
-    <link href="css/library/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/library/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -19,8 +19,8 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <!-- ヘッダーとフッダー -->
-    <link href="css/footer-navbar.css" rel="stylesheet">
-    <link href="css/default.css" rel="stylesheet">
+    <link href="/css/footer-navbar.css" rel="stylesheet">
+    <link href="/css/default.css" rel="stylesheet">
   </head>
   <body>
 
@@ -29,8 +29,8 @@
 	<div class="thumbnail">
 	  <img src="<%=userIcon %>" style="min-height: 100px; max-height: 150px;">
 	  <div class="caption">
-	    <h4 align="center"><%=userName %></h4>
-	    <div class="right" style="margin-right:10% !important;"><%=userID %></div>
+	    <h4 align="center" id="userName"><%=userName %></h4>
+	    <div class="right" id="userID" style="margin-right:10% !important;"><%=userID %></div>
 	  </div>
 
 	  <div class="row" align="center" style="margin-right: 0px; margin-left: 0px">
@@ -64,7 +64,7 @@
       <div class="navbar-inner">
 	<div class="container">
 	  <div class="left">
-	    <a class="navbar-brand" href="index.html">Hamakotter</a>
+	    <a class="navbar-brand" href="/index.html">Hamakotter</a>
 	  </div>
 	  <div class="right">
 	    <span id="counter" style="color: #FFFFFF">現在アクセスしている人数 1人</span>
@@ -79,16 +79,16 @@
       <div class="container">
 	<div class="row">
 	  <div class="col-xs-4 footerBtn">
-	    <a href="index.html">ホーム</a>
+	    <a href="/index.html">ホーム</a>
 	  </div>
 
 	  <div class="col-xs-4 footerBtn">
-	    <a href="notice.html">通知
+	    <a href="/notice.html">通知
 	      <span class="badge">42</span>
 	    </a>
 	  </div>
-	  <div class="col-xs-4 footerBtn selected">
-	    <a>ユーザー</a>
+	  <div class="col-xs-4 footerBtn <%=select %>">
+	    <a id="userPage">ユーザー</a>
 	  </div>
 	</div>
       </div>
@@ -97,12 +97,13 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="css/library/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/jquery.cookie.js"></script>
+    <script src="/css/library/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/bootbox.js"></script>
+    <script src="/js/jquery.cookie.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/user.js"></script>
-    <script src="js/select.js"></script>
-    <script src="js/strcount.js"></script>
-    <script src="js/accesscounter.js"></script>
+    <script src="/js/user.js"></script>
+    <script src="/js/select.js"></script>
+    <script src="/js/strcount.js"></script>
+    <script src="/js/accesscounter.js"></script>
   </body>
 </html>

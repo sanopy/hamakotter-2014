@@ -50,51 +50,59 @@ function handler(req, res){
   var splits = uri.split('.');
   var extension = splits[splits.length - 1];
 
-  /*ユーザーページのリクエスト処理  */
-  if(uri == './user.html'){
-    var cookies = cookie.parse(req.headers.cookie);
-    var ID = cookies.ID;
-    var name, tweet, favo;
-    
-    User.findOne({id: ID}, function(err, doc) {
-      if(err)
-	console.log(err);
-      
-      /* User Name を取得 */
-      name = doc.name;
+  var paths = uri.split('/');
 
-      /* ツイート数を取得 */
-      Tweet.find({id: ID}, function(err, docs) {
-	tweet = docs.length;
-	/* ふぁぼ数を取得 */
-	Tweet.find({favo: { $in:[ID] } }, function(err, docs) {
-	  favo = docs.length;
-	  
-	  var userData = ejs.render(userFile, {
-	    userIcon: './img/' + ID + '.jpeg',
-	    userName: name,
-	    userID:   '@' + ID,
-	    tweetNum: tweet + ' ついーと',
-	    favoNum:  favo + ' ふぁぼ'
-	  });
-	  res.writeHead(200, {'Content-Type': 'text/html'});
-	  res.write(userData);
-	  res.end();
-	});
+  var contentType;
+  switch(extension){
+    case 'html':
+      contentType = {'Content-Type': 'text/html'};
+      break;
+    case 'css':
+      contentType = {'Content-Type': 'text/css'};
+      break;
+    case 'js':
+      contentType = {'Content-Type': 'text/javascript'};
+    case 'jpeg':
+      contentType = {'Content-Type': 'image/jpeg'};
+      break;
+    case 'png':
+      contentType = {'Content-Type': 'image/png'};
+      break;
+  }
+  /* ユーザーページ(自分のページ)のリクエスト処理  */
+  if(uri == './user.html'){
+    /* cookieが空の時のエラー処理 */
+    if(req.headers.cookie == null) {
+      fs.readFile('./notfound.html', 'utf-8', function(err, data) {
+        res.writeHead(404, {'Content-Type': 'text/html'});
+        res.write(data);
+        res.end();
       });
-    });
+      return;
+    }
+
+    var cookies = cookie.parse(req.headers.cookie); // cookieが空だとここで鯖が落ちる
+    var ID = cookies.ID;
+    
+    sendUserPage(ID, 'selected', res);
+  }
+  /* ユーザーページ(他人のページ)のリクエスト処理 */
+  else if(paths.length == 3 && paths[1] == 'users'){
+    var ID = paths[2];
+
+    sendUserPage(ID, '', res);
   }
   /* 画像ファイルのリクエスト処理 */
   else if(extension == 'jpeg' || extension == 'jpg' || extension == 'png'){
     fs.readFile(uri, function(err, data) {
       if(err){
 	fs.readFile('./img/img-notfound.png', function(err, data) {
-	  res.writeHead(500);
+	  res.writeHead(200, {'Content-Type': 'image/png'});
 	  res.write(data);
 	  res.end();
-	});2
+	});
       } else {
-	res.writeHead(200);
+	res.writeHead(200, contentType);
 	res.write(data);
 	res.end();
       }
@@ -104,12 +112,12 @@ function handler(req, res){
     fs.readFile(uri, 'utf-8', function(err, data) {
       if(err){
         fs.readFile('./notfound.html', 'utf-8', function(err, data) {
-          res.writeHead(404);
+          res.writeHead(404, {'Content-Type': 'text/html'});
           res.write(data);
           res.end();
         });
       } else {
-        res.writeHead(200);
+        res.writeHead(200, contentType);
         res.write(data);
         res.end();
       }
@@ -184,25 +192,6 @@ io.sockets.on('connection', function(socket) {
     });
   });
 
-  socket.on('user status', function(data) { /* ユーザーのふぁぼ・ついーと数を取得 */
-    var tweet;
-    var favo;
-    
-    Tweet.find({id: data}, function(err, docs) {
-      tweet = docs.length;
-
-      Tweet.find({favo: { $in:[data] } }, function(err, docs) {
-	favo = docs.length;
-
-
-	socket.json.emit('reply user status', {
-	  tweet: tweet,
-	  favo:  favo
-	});
-      });
-    });
-  });
-
   socket.on('user tweet', function(data) { /* ユーザーのついーとを取得 */
     Tweet.where({id: data}).sort({'time':'asc'}).exec(function(err, docs) {
       socket.emit('reply user tweet', docs);
@@ -271,5 +260,53 @@ io.sockets.on('connection', function(socket) {
     Tweet.find(function(err, docs) {
       io.sockets.emit('msg open', docs);
     });
+
+    Tweet.find({id: data.id}, function(err, docs) {
+      io.sockets.emit('reply user tweet', docs);
+    });
   });
 });
+
+function sendUserPage(ID, select, res){
+    var name, tweet, favo;
+
+  User.findOne({id: ID}, function(err, doc) {
+    if(err){
+      console.log(err);
+      return;
+    }
+    else if(doc == null){
+      fs.readFile('./notfound.html', 'utf-8', function(err, data) {
+        res.writeHead(404, {'Content-Type': 'text/html'});
+        res.write(data);
+        res.end();
+      });
+
+      return;
+    }
+
+    /* User Name を取得 */
+    name = doc.name;
+
+    /* ツイート数を取得 */
+    Tweet.find({id: ID}, function(err, docs) {
+      tweet = docs.length;
+      /* ふぁぼ数を取得 */
+      Tweet.find({favo: { $in:[ID] } }, function(err, docs) {
+	favo = docs.length;
+	
+	var userData = ejs.render(userFile, {
+	  userIcon: '/img/' + ID + '.jpeg',
+	  userName: name,
+	  userID:   '@' + ID,
+	  tweetNum: tweet + ' ついーと',
+	  favoNum:  favo + ' ふぁぼ',
+	  select: select
+	});
+	res.writeHead(200, {'Content-Type': 'text/html'});
+	res.write(userData);
+	res.end();
+      });
+    });
+  });
+}

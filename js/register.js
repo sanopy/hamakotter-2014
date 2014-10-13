@@ -7,13 +7,22 @@ $(function() {
     var pass1 = $('#pass1').val();
     var pass2 = $('#pass2').val();
 
-    if(id.match(/[a-zA-Z0-9_]+/) != id){
-      alert("IDが不正です");
-    } else if(pass1 != pass2) {
-      $('#pass1').val("");
-      $('#pass2').val("");
-      alert("パスワードが一致しません!");
-    } else {
+    if(name.length == 0)
+      dialog('Error', '名前は１文字以上にしてください');
+    else if(id.length == 0)
+      dialog('Error', 'IDは１文字以上にしてください');
+    else if(id.match(/[a-zA-Z0-9_]+/) != id){
+      dialog('Error', 'IDが不正です<br>使用可能な文字は半角のアルファベット(A〜Z, a〜z)、数字(0〜9)、アンダーバー(_)です');
+      $('#id').val('');
+    }
+    else if(pass1 != pass2) {
+      $('#pass1').val('');
+      $('#pass2').val('');
+      dialog('Error', 'パスワードが一致しません');
+    }
+    else if(pass1.length == 0)
+      dialog('Error', 'パスワードは１文字以上にしてください');
+    else {
       socket.json.emit('create user', {
 	id: id,
 	name: name,
@@ -22,13 +31,10 @@ $(function() {
 
       socket.on('reply create user', function(data) {
 	if(data){
-	  $('#name').val("");
-	  $('#id').val("");
-	  $('#pass1').val("");
-	  $('#pass2').val("");
-	  alert("既に存在するIDです");
+	  $('#id').val('');
+	  dialog('Sorry', '既に存在するIDです');
 	} else {
-	  alert("アカウントの作成に成功しました");
+	  dialog('Success', 'アカウントの作成に成功しました');
 	  $.cookie(  "ID",    id, { expires: 7 });
 	  $.cookie("name", pass1, { expires: 7});
 	  window.location.href = "index.html";
@@ -37,3 +43,14 @@ $(function() {
     }
   });
 });
+
+function dialog(title, mes) {
+  bootbox.hideAll();
+  bootbox.dialog({
+    title: title,
+    message: mes,
+    buttons: {
+      OK: { label: 'OK' }
+    }
+  });
+}

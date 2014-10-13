@@ -19,8 +19,19 @@ $(function() {
 	$.cookie("name", data.name, { expires: 7 });
 	window.location.href = "index.html";
       }
-      else
-        alert("IDまたはパスワードが間違っています");
+      else{
+	bootbox.hideAll();
+	bootbox.dialog({
+	  title: "Wrong ID or Password",
+	  message: "IDまたはパスワードが間違っています",
+	  buttons: {
+	    OK: {
+	      label: 'OK',
+	      callback: function(){ }
+	    }
+	  }
+	});
+      }
     });
   });
 });

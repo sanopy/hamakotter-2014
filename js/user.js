@@ -1,10 +1,8 @@
 $(function() {
   var socket = io.connect();
 
-  var id   = $.cookie("ID");
-  var name = $.cookie("name");
-  if(!id || !name)
-    window.location.href = "login.html"
+  var id   = $('#userID').text().substr(1);
+  var name = $('#userName').text();
 
   socket.on('connect', function() {
     socket.emit('user tweet', id);
@@ -53,7 +51,6 @@ function formatDate(date) {
 }
 
 function color(data) {
-  console.log(data.favo);
   if(data.favo.indexOf($.cookie("ID")) != -1)
     return 'style="color: rgb(255, 140, 0)">ふぁぼ済み';
   else
@@ -74,7 +71,7 @@ function formatTweet(data) {
 
   var link = '/users/' + data.id;
 
-  var html = '    <div class="tweet">\n	  <div class="tweet-body">\n	    <div class="media">\n	      <a class="pull-left">\n		    <img class="media-object" src="img/' + data.id + '.jpeg" alt="" width="75">\n	      </a>\n	      <div class="media-body">\n		    <h4 class="media-heading"><a href="'+ link + '"><strong>' + data.name + '</strong>@' + data.id + '</a></h4>\n		    <p>' + data.msg + '</p>\n		    <p class="tweetinfo">' + data.time + '</p>\n		    <div class="tweet-footer">\n		      <div class="left">' + formatDate(data.time) +	 '</div>\n		      <div class="right">\n	            <a class="favo" onclick="" ' + color(data) + '</a>\n       	        <a class="reply" onclick="">返信</a>\n' + replyURL(data.id) + '		      </div>\n	    	  <div class="message">\n	  	        <div class="modal-body" method="get">\n		          <textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>\n		        </div>\n  		        <div class="modal-footer">\n		          <span class="char-count">140</span>\n       	          <button type="button" class="btn btn-default" data-dismiss="modal">返信</button>\n	  	        </div>\n		      </div>\n	         </div>\n	      </div>\n	    </div>\n	  </div>\n    </div>\n';
+  var html = '    <div class="tweet">\n	  <div class="tweet-body">\n	    <div class="media">\n	      <a class="pull-left">\n		    <img class="media-object" src="/img/' + data.id + '.jpeg" alt="" width="75">\n	      </a>\n	      <div class="media-body">\n		    <h4 class="media-heading"><a href="'+ link + '"><strong>' + data.name + '</strong>@' + data.id + '</a></h4>\n		    <p>' + data.msg + '</p>\n		    <p class="tweetinfo">' + data.time + '</p>\n		    <div class="tweet-footer">\n		      <div class="left">' + formatDate(data.time) +	 '</div>\n		      <div class="right">\n	            <a class="favo" onclick="" ' + color(data) + '</a>\n       	        <a class="reply" onclick="">返信</a>\n' + replyURL(data.id) + '		      </div>\n	    	  <div class="message">\n	  	        <div class="modal-body" method="get">\n		          <textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>\n		        </div>\n  		        <div class="modal-footer">\n		          <span class="char-count">140</span>\n       	          <button type="button" class="btn btn-default" data-dismiss="modal">返信</button>\n	  	        </div>\n		      </div>\n	         </div>\n	      </div>\n	    </div>\n	  </div>\n    </div>\n';
 
   return html;
 }
