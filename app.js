@@ -258,11 +258,11 @@ io.sockets.on('connection', function(socket) {
     });
 
     Tweet.where().sort({'time':'asc'}).exec(function(err, docs) {
-      socket.emit('msg open', docs);
+      io.sockets.emit('msg open', docs);
     });
 
     Tweet.where({id: data}).sort({'time':'asc'}).exec(function(err, docs) {
-      socket.emit('reply user tweet', docs);
+      io.sockets.emit('reply user tweet', docs);
     });
   });
 });
