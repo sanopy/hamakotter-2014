@@ -257,12 +257,12 @@ io.sockets.on('connection', function(socket) {
 	console.log(err);
     });
 
-    Tweet.find(function(err, docs) {
-      io.sockets.emit('msg open', docs);
+    Tweet.where().sort({'time':'asc'}).exec(function(err, docs) {
+      socket.emit('msg open', docs);
     });
 
-    Tweet.find({id: data.id}, function(err, docs) {
-      io.sockets.emit('reply user tweet', docs);
+    Tweet.where({id: data}).sort({'time':'asc'}).exec(function(err, docs) {
+      socket.emit('reply user tweet', docs);
     });
   });
 });

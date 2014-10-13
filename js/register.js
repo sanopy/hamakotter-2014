@@ -36,7 +36,7 @@ $(function() {
 	} else {
 	  dialog('Success', 'アカウントの作成に成功しました');
 	  $.cookie(  "ID",    id, { expires: 7 });
-	  $.cookie("name", pass1, { expires: 7});
+	  $.cookie("name",  name, { expires: 7});
 	  window.location.href = "index.html";
 	}
       });
