@@ -10,9 +10,6 @@
     <!-- Bootstrap -->
     <link href="css/library/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- jQuery UI -->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -26,51 +23,23 @@
   <body>
 
     <div class="container">
-      <div class="tweet">
-	<div class="tweet-body">
-	  <div class="media">
-	    <a class="pull-left">
-	      <img class="media-object" src="img/ei1333.jpeg" alt="" width="75">
-	    </a>
-	    <div class="media-body">
-	      <h4 class="media-heading"><strong>ししょー@いーあいいちさんさんさん</strong>@ei1333</h4>
-	      <p>今日はでぃぶちょく得れた</p>
-	      
-	      <div class="tweet-footer">
-		<div class="left">
-		  2014年9月25日 - 5:55pm
-		</div>
-		<div class="right">
-		  <a class="favo">ふぁぼ</a>
-		  <a class="reply">返信</a>
-		</div>
-		<div class="message">
-		  <div class="modal-body" method="get">
-		    <textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>
-		  </div>
+      <div id="logs"></div>
+    </div>
 
-		  <div class="modal-footer">
-		    <span>
-		      140 <!-- 文字数制限 -->
-		    </span>
-		    <button type="button" class="btn btn-default" data-dismiss="modal">返信</button>
-		  </div> <!--ここらへんでぃぶでぃぶしてる -->
-		</div>
-	      </div>
-	    </div>
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar-inner">
+	<div class="container">
+	  <div class="left">
+	    <a class="navbar-brand" href="index.html">Hamakotter</a>
+	  </div>
+	  <div class="right">
+	    <span id="counter" style="color: #FFFFFF">現在アクセスしている人数 1人</span>
+	    <button class="btn btn-primary btn-lg" style="margin-top: 2px !important;" id="logout">ログアウト</button>
 	  </div>
 	</div>
       </div>
     </div>
 
-
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="navbar-inner">
-	<div class="container">
-	  <a class="navbar-brand" href="index.html">Hamakotter</a>
-	</div>
-      </div>
-    </div>
 
     <div class="footer navbar-default">
       <div class="container">
@@ -89,13 +58,18 @@
       </div>
     </div>
 
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="css/library/bootstrap/js/bootstrap.min.js"></script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- jQuery UI -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="css/library/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/bootbox.js"></script>
+    <script src="js/tweet.js"></script>
     <script src="js/select.js"></script>
+    <script src="js/notice.js"></script>
+    <script src="js/strcount.js"></script>
+    <script src="js/accesscounter.js"></script>
   </body>
 </html>
 

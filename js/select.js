@@ -1,28 +1,33 @@
 $(function() {
   var socket = io.connect();
-
+  
   if(!$.cookie('ID') || !$.cookie('name'))
     $('#logout').text('ログイン');
-
+  
   $('#logout').click(function() {
     $.removeCookie("ID");
     $.removeCookie("name");
     window.location.href = "/login.html";
   });
-
+  
+  $('#noticePage').click(function() {
+    if(!jumpLogin('通知'))
+      window.location.href = "/notice.html";
+  });
+  
   $('#userPage').click(function() {
     if(!jumpLogin('ユーザーページ'))
       window.location.href = "/user.html";
   });
-
+  
   $(document).on('click', '.btn.btn-default', function() {
     if(!jumpLogin('ツイート')){
-
-    var time = new Date();
+      
+      var time = new Date();
       var str  = $(this).parent().parent().children('.modal-body').children('.form-control').val();
       var id   = $.cookie("ID");
       var name = $.cookie("name");
-
+      
       if(0 < str.length && str.length <= 140){
 	socket.json.emit('send msg', {
 	  id:   id,
@@ -30,22 +35,31 @@ $(function() {
 	  name: name,
 	  time: time
 	});
+	$(this).parent().parent().children('.modal-body').children('.form-control').val('');
       }
-
-      $(this).parent().parent().children('.modal-body').children('.form-control').val('');
+      else if(str.length == 0){
+	dialog('Error', '1文字以上入力してください');
+      }
+      else{
+	dialog('Error', '文字数オーバーです');
+      }
+      
       //$(this).parent().parent().slideToggle();
     }
   });
 
   $(document).on('click', '.favo', function() {
     if(!jumpLogin('ふぁぼ')){
+      var favo = $(this).text().match(/[0-9]+/);
+      if(favo == null) favo = 0;
 
-      if( $(this).css("color") != "rgb(255, 140, 0)" ){
-	$(this).text("ふぁぼ済み");
+      if( $(this).css("color") != "rgb(255, 140, 0)" ){ // ふぁぼる
+	$(this).text((parseInt(favo) + 1) + " ふぁぼ");
 	$(this).css( 'color' ,'#FF8C00' );
       }
-      else{
-	$(this).text("ふぁぼ");
+      else{ // ふぁぼ解除
+	favo = favo == 1? '' : parseInt(favo) - 1;
+	$(this).text(favo + " ふぁぼ");
 	$(this).css( 'color' ,'rgb( 42, 100, 150 )');
       }
       
@@ -65,11 +79,12 @@ $(function() {
   $(document).on('click', '.reply', function() {
     if(!jumpLogin('返信')){
 
-    var id = $(this).parent().parent().parent().children(".media-heading").text();
+      var id = $(this).parent().parent().parent().children(".media-heading").text();
       id = id.substr(id.lastIndexOf("@"));
 
-      $(this).parent().parent().children(".message").children(".modal-body").children(".form-control").val(id + " ");
       $(this).parent().parent().children(".message").slideToggle();
+      $(this).parent().parent().children(".message").children('.modal-body').children(".form-control").focus();
+      $(this).parent().parent().children(".message").children(".modal-body").children(".form-control").val(id + " ");
     }
   });
 
@@ -78,7 +93,7 @@ $(function() {
 
       var id   = $.cookie("ID");
       var date = $(this).parent().parent().parent().children('.tweetinfo').text();
-    
+      
       bootbox.confirm('本当につい消しするよ?', function(result) {
 	if(result){
 	  socket.json.emit('tweetRemove', {
@@ -115,4 +130,15 @@ function jumpLogin(s) {
   }
 
   return false;
+}
+
+function dialog(title, mes) {
+  bootbox.hideAll();
+  bootbox.dialog({
+    title: title,
+    message: mes,
+    buttons: {
+      OK: { label: 'OK' }
+    }
+  });
 }

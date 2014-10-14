@@ -83,12 +83,12 @@ body {
     display: none;
 }
 
-.tweetinfo { /* 隠し要素 */
+.tweetinfo {
     display: none !important;
 }
 
 
-@media (min-width: 500px){ /*日付となんとかボタンの改行の有無 */
+@media (min-width: 500px){
     .left{
 	float: left;
     }

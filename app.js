@@ -56,18 +56,18 @@ function handler(req, res){
   switch(extension){
     case 'html':
       contentType = {'Content-Type': 'text/html'};
-      break;
+    break;
     case 'css':
-      contentType = {'Content-Type': 'text/css'};
-      break;
+    contentType = {'Content-Type': 'text/css'};
+    break;
     case 'js':
-      contentType = {'Content-Type': 'text/javascript'};
+    contentType = {'Content-Type': 'text/javascript'};
     case 'jpeg':
-      contentType = {'Content-Type': 'image/jpeg'};
-      break;
+    contentType = {'Content-Type': 'image/jpeg'};
+    break;
     case 'png':
-      contentType = {'Content-Type': 'image/png'};
-      break;
+    contentType = {'Content-Type': 'image/png'};
+    break;
   }
   /* ユーザーページ(自分のページ)のリクエスト処理  */
   if(uri == './user.html'){
@@ -150,13 +150,24 @@ io.sockets.on('connection', function(socket) {
     tweet.time = data.time;
     tweet.favo = [];
 
+    //var target_id = tweet.msg.match(/@[A-Za-z0-9_]+/g);
     io.sockets.emit('push msg', tweet);
+
+    /* 通知に関する処理 */
+    /*
+    var target_id = tweet.msg.match(/@[A-Za-z0-9_]+/g);
+    io.sockets.json.emit('notice reply', {
+      id: target_id,
+      tweet: tweet
+    });
+    */
 
     tweet.save(function(err) {
       if(err)
         console.log(err);
     });
   });
+
   socket.on('create user', function(data) {
     User.findOne({id: data.id}, function(err, doc) {
       socket.emit('reply create user', doc);
@@ -215,7 +226,7 @@ io.sockets.on('connection', function(socket) {
 	return;
       }
       else if(doc.favo.indexOf(data.id) == -1) /* ふぁぼってなかった */
-	doc.favo.push(data.id);
+      doc.favo.push(data.id);
       else{ /* ふぁぼってた */
 	for(var i = 0;i < doc.favo.length; i++){
 	  if(doc.favo[i] == data.id){
@@ -226,7 +237,6 @@ io.sockets.on('connection', function(socket) {
       }
 
       var tweet  = new Tweet();
-      //tweet._id  = doc._id;
       tweet.id   = doc.id;
       tweet.msg  = doc.msg;
       tweet.name = doc.name;
@@ -261,14 +271,14 @@ io.sockets.on('connection', function(socket) {
       io.sockets.emit('msg open', docs);
     });
 
-    Tweet.where({id: data}).sort({'time':'asc'}).exec(function(err, docs) {
+    Tweet.where({id: data.id}).sort({'time':'asc'}).exec(function(err, docs) {
       io.sockets.emit('reply user tweet', docs);
     });
   });
 });
 
 function sendUserPage(ID, select, res){
-    var name, tweet, favo;
+  var name, tweet, favo;
 
   User.findOne({id: ID}, function(err, doc) {
     if(err){
