@@ -29,15 +29,24 @@ body {
     color: #FFFFFF !important;
 }
 .selected{
-    background-color: #222222 !important;
+    background-color: #cc0000 !important;
     text-decoration: none !important;
+}
+.unselected{
+    background-color: #555555 !important;
 }
 
 .footerBtn:hover,
 .footerBtn:focus{
-	background-color: #222222 !important;
+	background-color: #cc0000 !important;
 	text-decoration: none !important;
 }
+
+#frame{
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}
+
 
 .container .btn-group
 {
@@ -73,6 +82,12 @@ body {
     margin-left: 10px !important;
     text-align: left;
 }
+.left_non{
+    color: #888888;
+    text-align: left;
+    margin-right: 0px !important;
+    float: left;
+}
 .right{
     text-align: right;
     margin-right: 10px !important;
@@ -100,11 +115,11 @@ body {
     }
 }
 
-#tweetNum,
-#favoNum{
-    text-decoration: underline;
-}
 #tweetNum:hover,
 #favoNum:hover{
     color: rgb( 42, 100, 150);
+}
+
+.media-body p:not(.tweetinfo){
+    word-wrap: break-word;
 }

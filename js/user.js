@@ -4,6 +4,10 @@ $(function() {
   var id   = $('#userID').text().substr(1);
   var name = $('#userName').text();
 
+  $('#config').click(function() {
+    window.location.href = "/config.html";
+  });
+
   socket.on('connect', function() {
     socket.emit('user tweet', id);
   });
@@ -12,14 +16,19 @@ $(function() {
     socket.emit('user tweet', id);
     
     $('#tweetNum').parent().addClass('selected');
+    $('#tweetNum').parent().removeClass('unselected');
     $('#favoNum').parent().removeClass('selected');
+    $('#favoNum').parent().addClass('unselected');
+
   });
 
   $('#favoNum').click(function() {
     socket.emit('user favo', id);
 
     $('#favoNum').parent().addClass('selected');
+    $('#favoNum').parent().removeClass('unselected');
     $('#tweetNum').parent().removeClass('selected');
+    $('#tweetNum').parent().addClass('unselected');
   });
 
   socket.on('reply user tweet', function(data) {

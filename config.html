@@ -19,12 +19,23 @@
     <!-- ヘッダーとフッダー -->
     <link href="css/footer-navbar.css" rel="stylesheet">
     <link href="css/default.css" rel="stylesheet">
+    <link href="css/register.css" rel="stylesheet">
   </head>
   <body>
 
     <div class="container">
-      <div id="logs"></div>
+      <form class="form-signin" role="form">
+	<h2 class="form-signin-heading">ユーザー名変更</h2>
+	<input type="name" class="form-control" placeholder="新しいユーザー名" required autofocs id="name">
+	<hr>
+	<button class="btn btn-lg btn-primary btn-block" type="button" id="register-button">変更</button>
+	<br><br><br><hr><br><br><br>
+	<button class="btn btn-lg btn-puro btn-block btn-primary" type="button" id="register-button">アカウント削除</button>
+	<br>
+      </form>
     </div>
+
+
 
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="navbar-inner">
@@ -39,36 +50,16 @@
 	</div>
       </div>
     </div>
-
-    <div class="footer navbar-default">
-      <div class="container">
-	<div class="row">
-	  <div class="col-xs-4 footerBtn ">
-	    <a href="index.html">ホーム</a>
-	  </div>
-	  
-	  <div class="col-xs-4 footerBtn selected">
-	    <a>通知</a>
-	  </div>
-	  <div class="col-xs-4 footerBtn">
-	    <a href="user.html">ユーザー</a>
-	  </div>
-	</div>
-      </div>
-    </div>
+    
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="css/library/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/bootbox.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/jquery.cookie.js"></script>
-    <script src="js/bootbox.js"></script>
-    <script src="js/tweet.js"></script>
-    <script src="js/select.js"></script>
-    <script src="js/notice.js"></script>
-    <script src="js/strcount.js"></script>
-    <script src="js/accesscounter.js"></script>
+    <script src="js/register.js"></script>
   </body>
 </html>
 

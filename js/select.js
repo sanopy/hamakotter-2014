@@ -96,7 +96,7 @@ $(function() {
       
       bootbox.confirm('本当につい消しするよ?', function(result) {
 	if(result){
-	  socket.json.emit('tweetRemove', {
+	  socket.json.emit('remove tweet', {
 	    id: id,
 	    date: date
 	  });
