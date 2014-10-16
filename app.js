@@ -5,6 +5,7 @@ var crypto   = require('crypto');
 var cookie   = require('cookie');
 var mongoose = require('mongoose');
 var socketio = require('socket.io');
+var qs       = require('querystring');
 var settings = require('./settings.js');
 
 var server = http.createServer(handler);
@@ -47,11 +48,13 @@ var Favo  = mongoose.model('Favo');
 /* ejsテンプレートの読み込み */
 var userFile = fs.readFileSync('./user.ejs', 'utf8');
 
-var icons = ['/img/bat.png', '/img/halloween.png', '/img/death.png', '/img/witch.png']
+var icons = ['/img/bat.png', '/img/halloween.png', '/img/death.png', '/img/witch.png'];
 
 /* HTMLファイル 読み込み */
 function handler(req, res){
   var uri = '.' + req.url;
+  if(uri.indexOf('./hamakotter') == 0)
+    uri = './' + uri.substr(13);
   if(uri == './')
     uri = './index.html';
 
@@ -68,20 +71,44 @@ function handler(req, res){
     case 'html':
       contentType = {'Content-Type': 'text/html'};
     break;
+
     case 'css':
     contentType = {'Content-Type': 'text/css'};
     break;
+    
     case 'js':
     contentType = {'Content-Type': 'text/javascript'};
+    break;
+
     case 'jpeg':
+    case 'jpg':
+    case 'JPEG':
+    case 'JPG':
     contentType = {'Content-Type': 'image/jpeg'};
     break;
+
     case 'png':
+    case 'PNG':
     contentType = {'Content-Type': 'image/png'};
     break;
   }
+  /* 画像アップロード */
+  if(uri == './config.html' && req.method == "POST"){
+    var reqBody = '';
+    req.on('data', function(data) {
+      reqBody += data;
+    });
+
+    req.on('end', function() {
+      var form = qs.parse(reqBody);
+console.log(form);
+      var input = form.input;
+      /* fs.writeFile() */
+      console.log(input);
+    });
+  }
   /* ユーザーページ(自分のページ)のリクエスト処理  */
-  if(uri == './user.html'){
+  else if(uri == './user.html'){
     /* cookieが空の時のエラー処理 */
     if(req.headers.cookie == null) {
       fs.readFile('./notfound.html', 'utf-8', function(err, data) {
