@@ -32,9 +32,9 @@ $(function() {
   });
 
   socket.on('reply user tweet', function(data) {
-    if(data[0].id != id) return; // もし自分のついーとではなければreturn
-
     $('#logs').empty();
+
+    if(data[0].id != id) return; // もし自分のついーとではなければreturn
     $.each(data, function(key, value) {
       value.msg = $("<div/>").text(value.msg).html();
       value.msg = value.msg.replace(/\n/g, '<br>');

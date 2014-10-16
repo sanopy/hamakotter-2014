@@ -30,14 +30,15 @@ $(function() {
       });
 
       socket.on('reply create user', function(data) {
-	if(data){
+	if(data.flag){
 	  $('#id').val('');
 	  dialog('Sorry', '既に存在するIDです');
 	} else {
-	  dialog('Success', 'アカウントの作成に成功しました');
-	  $.cookie(  "ID",    id, { expires: 7 });
-	  $.cookie("name",  name, { expires: 7});
-	  window.location.href = "index.html";
+	  $.cookie(  "ID",        id, { expires: 7 });
+	  $.cookie("name",      name, { expires: 7});
+	  $.cookie("icon", data.icon, { expires: 7});
+	  dialog2('Success', 'アカウントの作成に成功しました');
+	  //window.location.href = "index.html";
 	}
       });
     }
@@ -50,7 +51,25 @@ function dialog(title, mes) {
     title: title,
     message: mes,
     buttons: {
-      OK: { label: 'OK' }
+      OK: { 
+	label: 'OK'
+      }
+    }
+  });
+}
+
+function dialog2(title, mes) {
+  bootbox.hideAll();
+  bootbox.dialog({
+    title: title,
+    message: mes,
+    buttons: {
+      OK: { 
+	label: 'OK',
+	callback: function() {
+	  window.location.href = "/index.html";
+	}
+      }
     }
   });
 }

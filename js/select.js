@@ -27,12 +27,14 @@ $(function() {
       var str  = $(this).parent().parent().children('.modal-body').children('.form-control').val();
       var id   = $.cookie("ID");
       var name = $.cookie("name");
+      var icon = $.cookie("icon");
       
       if(0 < str.length && str.length <= 140){
 	socket.json.emit('send msg', {
 	  id:   id,
 	  msg:  str,
 	  name: name,
+	  icon: icon,
 	  time: time
 	});
 	$(this).parent().parent().children('.modal-body').children('.form-control').val('');

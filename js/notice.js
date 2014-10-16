@@ -32,7 +32,7 @@ $(function() {
   });
 
   socket.on('notice favo', function(data) {
-    /* ¤Õ¤¡¤Ü½èÍı */
+    /* ãµãã¼å‡¦ç† */
   });
 
 });

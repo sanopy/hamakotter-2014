@@ -17,6 +17,7 @@ $(function() {
       if(data){
 	$.cookie(  "ID",        id, { expires: 7 });
 	$.cookie("name", data.name, { expires: 7 });
+	$.cookie("icon", data.icon, { expires: 7 });
 	window.location.href = "index.html";
       }
       else{

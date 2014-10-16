@@ -18,6 +18,7 @@ var TweetSchema = new Schema({
   id:   String,
   msg:  String,
   name: String,
+  icon: String,
   time: Date,
   favo: []
 });
@@ -25,6 +26,7 @@ var TweetSchema = new Schema({
 var UserSchema = new Schema({
   id:       String,
   name:     String,
+  icon:     String,
   password: String
 });
 
@@ -44,6 +46,8 @@ var Favo  = mongoose.model('Favo');
 
 /* ejsテンプレートの読み込み */
 var userFile = fs.readFileSync('./user.ejs', 'utf8');
+
+var icons = ['/img/bat.png', '/img/halloween.png', '/img/death.png', '/img/witch.png']
 
 /* HTMLファイル 読み込み */
 function handler(req, res){
@@ -91,13 +95,13 @@ function handler(req, res){
     var cookies = cookie.parse(req.headers.cookie); // cookieが空だとここで鯖が落ちる
     var ID = cookies.ID;
     
-    sendUserPage(ID, 'selected', '設定', res);
+    sendUserPage(ID, 'selected', true, res);
   }
   /* ユーザーページ(他人のページ)のリクエスト処理 */
   else if(paths.length == 3 && paths[1] == 'users'){
     var ID = paths[2];
 
-    sendUserPage(ID, '', '', res);
+    sendUserPage(ID, '', false, res);
   }
   /* 画像ファイルのリクエスト処理 */
   else if(extension == 'jpeg' || extension == 'jpg' || extension == 'png'){
@@ -155,6 +159,7 @@ io.sockets.on('connection', function(socket) {
     tweet.msg  = data.msg;
     tweet.name = data.name;
     tweet.time = data.time;
+    tweet.icon = data.icon;
     tweet.favo = [];
 
     io.sockets.emit('push msg', tweet);
@@ -166,8 +171,13 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('create user', function(data) {
+    var icon = icons[Math.floor(Math.random() * 4)];
+
     User.findOne({id: data.id}, function(err, doc) {
-      socket.emit('reply create user', doc);
+      socket.json.emit('reply create user', {
+	flag: doc,
+	icon: icon
+      });
 
       if(!doc){
         var md5 = crypto.createHash('md5');
@@ -176,6 +186,7 @@ io.sockets.on('connection', function(socket) {
         var user = new User();
         user.id       = data.id;
         user.name     = data.name;
+	user.icon     = icon;
         user.password = md5.digest('hex');
 
         user.save(function(err) {
@@ -226,12 +237,7 @@ io.sockets.on('connection', function(socket) {
 	doc.favo.push(data.id);
       }
       else{ /* ふぁぼってた */
-	for(var i = 0;i < doc.favo.length; i++){
-	  if(doc.favo[i] == data.id){
-	    doc.favo.splice(i, 1);
-	    break;
-	  }
-	}
+	doc.favo.splice(doc.favo.indexOf(data.id), 1);
       }
 
       var tweet  = new Tweet();
@@ -239,6 +245,7 @@ io.sockets.on('connection', function(socket) {
       tweet.msg  = doc.msg;
       tweet.name = doc.name;
       tweet.time = doc.time;
+      tweet.icon = doc.icon;
       tweet.favo = doc.favo;
 
       /* ついーと情報を更新 */
@@ -274,18 +281,108 @@ io.sockets.on('connection', function(socket) {
     });
   });
 
+  socket.on('rename user name', function(data) {
+
+    User.findOne({id: data.id}, function(err, doc) {
+      var user  = new User();
+      user.id   = doc.id;
+      user.name = data.name;
+      user.icon = doc.icon;
+      user.password = doc.password;
+      
+      User.remove({id: data.id}, function(err) {
+	if(err)
+	  console.log(err);
+	
+	user.save(function(err) {
+	  if(err)
+	    console.log(err);
+	});
+      });
+
+      Tweet.find({id: data.id}, function(err, docs) {
+	for(var i = 0;i < docs.length; i++){
+	  var tweet  = new Tweet();
+	  tweet.id   = docs[i].id;
+	  tweet.msg  = docs[i].msg;
+	  tweet.name = data.name;
+	  tweet.time = docs[i].time;
+	  tweet.icon = docs[i].icon;
+	  tweet.favo = docs[i].favo;
+
+	  var query = {'$and':[
+	    {id:   docs[i].id},
+	    {time: docs[i].time}
+	  ]};
+
+	  Tweet.remove(query, function(err) {
+	    if(err)
+	      console.log(err);
+
+	    tweet.save(function(err) {
+	      if(err)
+		console.log(err);
+	    });
+	  });
+	}
+      });
+    });
+    
+  });
+
   socket.on('remove user', function(data) {
+    /* ユーザーのついーと削除 */
     Tweet.remove({id: data}, function(err) {
       if(err)
 	console.log(err);
       
-      /* ふぁぼ消す */
+      /* ユーザー情報を削除 */
+      User.remove({id: data}, function(err) {
+	if(err)
+	  console.log(err);
+      });
+      
+      /* ユーザーのふぁぼを削除 */
+      Tweet.find(function(err, docs){
+
+	for(var i = 0;i < docs.length; i++){
+	  var idx = docs[i].favo.indexOf(data);
+
+	  if(idx != -1){
+	    docs[i].favo.splice(idx, 1);
+
+	    var tweet  = new Tweet();
+	    tweet.id   = docs[i].id;
+	    tweet.msg  = docs[i].msg;
+	    tweet.name = docs[i].name;
+	    tweet.time = docs[i].time;
+	    tweet.icon = docs[i].icon;
+	    tweet.favo = docs[i].favo;
+
+	    var query = {'$and':[
+	      {id: docs[i].id},
+	      {time: docs[i].time}
+	    ]};
+	    Tweet.remove(query, function(err) {
+	      if(err)
+		console.log(err);
+
+	      tweet.save(function(err) {
+		if(err)
+		  console.log(err);
+	      });
+	    });
+
+	  }
+	}
+
+      });
     });
   });
 });
 
 function sendUserPage(ID, select, config, res){
-  var name, tweet, favo;
+  var name, tweet, favo, icon;
 
   User.findOne({id: ID}, function(err, doc) {
     if(err){
@@ -302,8 +399,15 @@ function sendUserPage(ID, select, config, res){
       return;
     }
 
-    /* User Name を取得 */
+    /* User Name icon を取得 */
     name = doc.name;
+    icon = doc.icon;
+
+    var conf;
+    if(config)
+      conf = '	      <button class="btn btn-primary" id="config">設定</button>';
+    else
+      conf = '';
 
     /* ツイート数を取得 */
     Tweet.find({id: ID}, function(err, docs) {
@@ -313,13 +417,13 @@ function sendUserPage(ID, select, config, res){
 	favo = docs.length;
 	
 	var userData = ejs.render(userFile, {
-	  userIcon: '/img/' + ID + '.jpeg',
+	  userIcon: icon,
 	  userName: name,
 	  userID:   '@' + ID,
 	  tweetNum: tweet + ' ついーと',
 	  favoNum:  favo + ' ふぁぼ',
 	  select: select,
-	  config: config
+	  config: conf
 	});
 	res.writeHead(200, {'Content-Type': 'text/html'});
 	res.write(userData);
