@@ -295,7 +295,7 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('rename user name', function(data) {
   
-    User.remove({id: data.id}, {$set: {name:data.name} }, function(err) {
+    User.update({id: data.id}, {$set: {name:data.name} }, function(err) {
       if(err)
 	console.log(err);
     });
