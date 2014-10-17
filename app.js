@@ -48,7 +48,7 @@ var Favo  = mongoose.model('Favo');
 /* ejsテンプレートの読み込み */
 var userFile = fs.readFileSync('./user.ejs', 'utf8');
 
-var icons = ['/img/bat.png', '/img/halloween.png', '/img/death.png', '/img/witch.png'];
+var icons = ['/img/bat.png', '/img/death.png', '/img/witch.png', '/img/1.png', '/img/2.png', '/img/3.png', '/img/4.png', '/img/5.png', '/img/6.png', '/img/7.png', '/img/9.png', '/img/cat.png'];
 
 /* HTMLファイル 読み込み */
 function handler(req, res){
@@ -92,23 +92,8 @@ function handler(req, res){
     contentType = {'Content-Type': 'image/png'};
     break;
   }
-  /* 画像アップロード */
-  if(uri == './config.html' && req.method == "POST"){
-    var reqBody = '';
-    req.on('data', function(data) {
-      reqBody += data;
-    });
-
-    req.on('end', function() {
-      var form = qs.parse(reqBody);
-console.log(form);
-      var input = form.input;
-      /* fs.writeFile() */
-      console.log(input);
-    });
-  }
-  /* ユーザーページ(自分のページ)のリクエスト処理  */
-  else if(uri == './user.html'){
+  
+  if(uri == './user.html'){
     /* cookieが空の時のエラー処理 */
     if(req.headers.cookie == null) {
       fs.readFile('./notfound.html', 'utf-8', function(err, data) {
@@ -198,7 +183,7 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('create user', function(data) {
-    var icon = icons[Math.floor(Math.random() * 4)];
+    var icon = icons[Math.floor(Math.random() * icons.length)];
 
     User.findOne({id: data.id}, function(err, doc) {
       socket.json.emit('reply create user', {
@@ -297,62 +282,44 @@ io.sockets.on('connection', function(socket) {
     Tweet.remove(query, function(err) {
       if(err)
 	console.log(err);
-    });
 
-    Tweet.where().sort({'time':'asc'}).exec(function(err, docs) {
-      io.sockets.emit('msg open', docs);
-    });
+      Tweet.where().sort({'time':'asc'}).exec(function(err, docs) {
+	io.sockets.emit('msg open', docs);
+      });
 
-    Tweet.where({id: data.id}).sort({'time':'asc'}).exec(function(err, docs) {
-      io.sockets.emit('reply user tweet', docs);
+      Tweet.where({id: data.id}).sort({'time':'asc'}).exec(function(err, docs) {
+	io.sockets.emit('reply user tweet', docs);
+      });
     });
   });
 
   socket.on('rename user name', function(data) {
+  
+    User.remove({id: data.id}, {$set: {name:data.name} }, function(err) {
+      if(err)
+	console.log(err);
+    });
 
-    User.findOne({id: data.id}, function(err, doc) {
-      var user  = new User();
-      user.id   = doc.id;
-      user.name = data.name;
-      user.icon = doc.icon;
-      user.password = doc.password;
-      
-      User.remove({id: data.id}, function(err) {
-	if(err)
-	  console.log(err);
-	
-	user.save(function(err) {
+    Tweet.find({id: data.id}, function(err, docs) {
+      for(var i = 0;i < docs.length; i++){
+	var tweet  = new Tweet();
+	tweet.id   = docs[i].id;
+	tweet.msg  = docs[i].msg;
+	tweet.name = data.name;
+	tweet.time = docs[i].time;
+	tweet.icon = docs[i].icon;
+	tweet.favo = docs[i].favo;
+
+	var query = {'$and':[
+	  {id:   docs[i].id},
+	  {time: docs[i].time}
+	]};
+
+	Tweet.update(query, {$set: {name: data.name} }, {multi: true}, function(err) {
 	  if(err)
 	    console.log(err);
 	});
-      });
-
-      Tweet.find({id: data.id}, function(err, docs) {
-	for(var i = 0;i < docs.length; i++){
-	  var tweet  = new Tweet();
-	  tweet.id   = docs[i].id;
-	  tweet.msg  = docs[i].msg;
-	  tweet.name = data.name;
-	  tweet.time = docs[i].time;
-	  tweet.icon = docs[i].icon;
-	  tweet.favo = docs[i].favo;
-
-	  var query = {'$and':[
-	    {id:   docs[i].id},
-	    {time: docs[i].time}
-	  ]};
-
-	  Tweet.remove(query, function(err) {
-	    if(err)
-	      console.log(err);
-
-	    tweet.save(function(err) {
-	      if(err)
-		console.log(err);
-	    });
-	  });
-	}
-      });
+      }
     });
     
   });
