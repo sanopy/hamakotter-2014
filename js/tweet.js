@@ -19,7 +19,11 @@ function color(data) {
 function replyURL(data) {
   var id = $.cookie("ID");
 
+<<<<<<< HEAD
   if(id == data || id == 'admin' || id == 'root')
+=======
+  if(id == data)
+>>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
     return '       	        <a class="remove" onclick="">つい消し</a>\n';
   else
     return '';
@@ -30,7 +34,11 @@ function formatTweet(data) {
 
   var link = '/users/' + data.id;
 
+<<<<<<< HEAD
   var html = '    <div class="tweet">\n	  <div class="tweet-body">\n	    <div class="media">\n	      <a class="pull-left">\n		    <img class="media-object" src="' + data.icon + '" alt="" style="height: 75px; width: 75px">\n	      </a>\n	      <div class="media-body">\n		    <h4 class="media-heading"><a href="'+ link + '"><strong>' + data.name + '</strong>@' + data.id + '</a></h4>\n		    <p>' + data.msg + '</p>\n		    <p class="tweetinfo">' + data.time + '</p>\n		    <div class="tweet-footer">\n		      <div class="left">' + formatDate(data.time) +	 '</div>\n		      <div class="right">\n	            <a class="favo" onclick="" ' + color(data) + '</a>\n       	        <a class="reply" onclick="">返信</a>\n' + replyURL(data.id) + '		      </div>\n	    	  <div class="message">\n	  	        <div class="modal-body" method="get">\n		          <textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>\n		        </div>\n  		        <div class="modal-footer">\n		          <span class="char-count">140</span>\n       	          <button type="button" class="btn btn-default" data-dismiss="modal">返信</button>\n	  	        </div>\n		      </div>\n	         </div>\n	      </div>\n	    </div>\n	  </div>\n    </div>\n';
+=======
+  var html = '    <div class="tweet">\n	  <div class="tweet-body">\n	    <div class="media">\n	      <a class="pull-left">\n		    <img class="media-object" src="' + data.icon + '" alt="" width="75">\n	      </a>\n	      <div class="media-body">\n		    <h4 class="media-heading"><a href="'+ link + '"><strong>' + data.name + '</strong>@' + data.id + '</a></h4>\n		    <p>' + data.msg + '</p>\n		    <p class="tweetinfo">' + data.time + '</p>\n		    <div class="tweet-footer">\n		      <div class="left">' + formatDate(data.time) +	 '</div>\n		      <div class="right">\n	            <a class="favo" onclick="" ' + color(data) + '</a>\n       	        <a class="reply" onclick="">返信</a>\n' + replyURL(data.id) + '		      </div>\n	    	  <div class="message">\n	  	        <div class="modal-body" method="get">\n		          <textarea class="form-control" rows="5" name="content" style="resize:none"></textarea>\n		        </div>\n  		        <div class="modal-footer">\n		          <span class="char-count">140</span>\n       	          <button type="button" class="btn btn-default" data-dismiss="modal">返信</button>\n	  	        </div>\n		      </div>\n	         </div>\n	      </div>\n	    </div>\n	  </div>\n    </div>\n';
+>>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
 
   return html;
 }

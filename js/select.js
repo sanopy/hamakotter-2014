@@ -45,9 +45,14 @@ $(function() {
       else{
 	dialog('Error', '文字数オーバーです');
       }
+<<<<<<< HEAD
 
       if($(this).attr('class').indexOf("btn-primary") == -1)
 	$(this).parent().parent().slideToggle();
+=======
+      
+      //$(this).parent().parent().slideToggle();
+>>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
     }
   });
 
@@ -94,8 +99,12 @@ $(function() {
   $(document).on('click', '.remove', function() {
     if(!jumpLogin('つい消し')){
 
+<<<<<<< HEAD
       var id   = $(this).parent().parent().parent().children('.media-heading').text();
       id = id.substr(id.lastIndexOf('@') + 1);
+=======
+      var id   = $.cookie("ID");
+>>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
       var date = $(this).parent().parent().parent().children('.tweetinfo').text();
       
       bootbox.confirm('本当につい消しするよ?', function(result) {
