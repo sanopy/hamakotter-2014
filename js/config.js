@@ -6,11 +6,7 @@ $(function() {
   var name = $.cookie("name");
 
   if(!id || !name)
-<<<<<<< HEAD
   window.location.href = "/index.html";
-=======
-    window.location.href = "/index.html";
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
 
   $('#name').val(name);
 
@@ -28,7 +24,6 @@ $(function() {
   });
 
   $('#icon-button').click(function() {
-<<<<<<< HEAD
     var img = $(this).parent().children('#image').children('.previews').children(img).attr('src');  
     if(img == undefined){
       dialog('Error', '画像を指定してください', '');
@@ -50,9 +45,6 @@ $(function() {
     else{
       dialog('Error', '画像ファイルではありません', '');
     }
-=======
-    
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
   });
 
   $('#remove-button').click(function() {
@@ -68,17 +60,10 @@ function dialog(title, mes, url) {
     message: mes,
     buttons: {
       OK: { 
-<<<<<<< HEAD
 	      label: 'OK',
 	      callback: function() {
 	        window.location.href = url;
 	      }
-=======
-	label: 'OK',
-	callback: function() {
-	  window.location.href = url;
-	}
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
       }
     }
   });
@@ -91,7 +76,6 @@ function inputDialog() {
     message: '<input id="pass" name="name" type="password" placeholder="パスワード" class="form-control input-md">',
     buttons: {
       OK: { 
-<<<<<<< HEAD
 	      label: 'OK',
 	      callback: function() {
 	        var socket = io.connect();
@@ -116,38 +100,8 @@ function inputDialog() {
 	        });
 	        
 	      }
-=======
-	label: 'OK',
-	callback: function() {
-	  var socket = io.connect();
-
-	  var id = $.cookie("ID");
-
-	  socket.json.emit('login', {
-	    id: id,
-	    password: $('#pass').val()
-	  });
-
-	  socket.on('reply login', function(data) {
-	    if(data){
-	      socket.emit('remove user', id);
-	      $.removeCookie("ID");
-	      $.removeCookie("name");
-	      dialog('Success', 'アカウントの削除に成功しました', '/index.html');
-	    }
-	    else{
-	      dialog('Error', 'パスワードが一致しませんでした', '');
-	    }
-	  });
-	  
-	}
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
       }
     }
   });
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1

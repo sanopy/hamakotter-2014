@@ -19,7 +19,7 @@ function color(data) {
 function replyURL(data) {
   var id = $.cookie("ID");
 
-  if(id == data || id == 'admin' || id == 'root')
+  if(id == data)
     return '       	        <a class="remove" onclick="">つい消し</a>\n';
   else
     return '';

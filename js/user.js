@@ -36,14 +36,9 @@ $(function() {
 
     if(data[0].id != id) return; // もし自分のついーとではなければreturn
     $.each(data, function(key, value) {
-<<<<<<< HEAD
       value.msg  = $("<div/>").text(value.msg).html();
       value.name = $("<div/>").text(value.name).html();
       value.msg  = value.msg.replace(/\n/g, '<br>');
-=======
-      value.msg = $("<div/>").text(value.msg).html();
-      value.msg = value.msg.replace(/\n/g, '<br>');
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
       $('#logs').prepend(formatTweet(value));
     });
   });
@@ -51,28 +46,18 @@ $(function() {
   socket.on('reply user favo', function(data) {
     $('#logs').empty();
     $.each(data, function(key, value) {
-<<<<<<< HEAD
       value.msg  = $("<div/>").text(value.msg).html();
       value.name = $("<div/>").text(value.name).html();
       value.msg  = value.msg.replace(/\n/g, '<br>');
-=======
-      value.msg = $("<div/>").text(value.msg).html();
-      value.msg = value.msg.replace(/\n/g, '<br>');
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
       $('#logs').prepend(formatTweet(value));
     });
   });
 
   socket.on('push msg', function(data) {
     if(data.id == id){ // もし自分のついーとならprepend()
-<<<<<<< HEAD
       data.msg  = $("<div/>").text(data.msg).html();
       data.name = $("<div/>").text(data.name).html();
       data.msg  = data.msg.replace(/\n/g, '<br>');
-=======
-      data.msg = $("<div/>").text(data.msg).html();
-      data.msg = data.msg.replace(/\n/g, '<br>');
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
       $('#logs').prepend(formatTweet(data));
     }
   });

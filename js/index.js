@@ -1,7 +1,6 @@
 $(function() {
   var socket = io.connect();
 
-<<<<<<< HEAD
   var pos;
   var tweets;
 
@@ -17,19 +16,12 @@ $(function() {
       }
     }
   });
-=======
-  /*
-  if(!$.cookie("ID") || !$.cookie("name"))
-    window.location.href = "login.html";
-   */
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
 
   socket.on('connect', function() {
     socket.emit('msg update');
   });
 
   socket.on('msg open', function(data) {
-<<<<<<< HEAD
     if(pos == undefined){
       tweets = data;
       $('#logs').empty();
@@ -59,19 +51,6 @@ $(function() {
     data.msg  = $("<div/>").text(data.msg).html();
     data.name = $("<div/>").text(data.name).html();
     data.msg  = data.msg.replace(/\n/g, '<br>');
-=======
-    $('#logs').empty();
-    $.each(data, function(key, value) {
-      value.msg = $("<div/>").text(value.msg).html();
-      value.msg = value.msg.replace(/\n/g, '<br>');
-      $('#logs').prepend(formatTweet(value));
-    });
-  });
-  
-  socket.on('push msg', function(data) {
-    data.msg = $("<div/>").text(data.msg).html();
-    data.msg = data.msg.replace(/\n/g, '<br>');
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
     $('#logs').prepend(formatTweet(data));
   });
 });

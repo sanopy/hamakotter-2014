@@ -15,15 +15,9 @@ $(function() {
 
     socket.on('reply login', function(data) {
       if(data){
-<<<<<<< HEAD
         console.log(data);
 	$.cookie(  "ID",        id, { expires: 7 });
 	$.cookie("name", data.name, { expires: 7 });
-=======
-	$.cookie(  "ID",        id, { expires: 7 });
-	$.cookie("name", data.name, { expires: 7 });
-	$.cookie("icon", data.icon, { expires: 7 });
->>>>>>> 5e75e5bb4fb168f17ca71e68c9fd4a46e1de56b1
 	window.location.href = "index.html";
       }
       else{
