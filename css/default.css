@@ -1,0 +1,125 @@
+body {
+     background-color: #FCFCFC;
+}
+.navbar-default{
+    background-color: #660000;
+}
+
+.btn-primary{
+    background-color: #cc0000 !important;
+    border: none;
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus
+{
+    color: #FFFFFF !important;
+}
+
+.footerBtn{
+    text-align: center !important;
+    position:relative !important;
+}
+.footerBtn a{
+    display: block;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    height: 100%;
+    color: #FFFFFF !important;
+}
+.selected{
+    background-color: #cc0000 !important;
+    text-decoration: none !important;
+}
+.unselected{
+    background-color: #555555 !important;
+}
+
+.footerBtn:hover,
+.footerBtn:focus{
+	background-color: #cc0000 !important;
+	text-decoration: none !important;
+}
+
+#frame{
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}
+
+
+.container .btn-group
+{
+    max-width: 550px;
+    margin: 0 auto !important;
+}
+.container .tweet{
+    max-width: 750px;
+    margin: 0 auto !important;
+}
+.container .media{
+    max-width: 600px;
+    margin: 0 auto !important;
+}
+
+.container .tweet{
+/*
+    background-color: #003333;
+    color: #FFFFFF;
+*/
+
+    border-bottom: 1px solid #CCCCCC;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+.container .tweet .tweet-footer{
+    padding-top: 3px;
+    padding-bottom: 0;
+}
+.left{
+    color: #888888;
+    margin-left: 10px !important;
+    text-align: left;
+}
+.left_non{
+    color: #888888;
+    text-align: left;
+    margin-right: 0px !important;
+    float: left;
+}
+.right{
+    text-align: right;
+    margin-right: 10px !important;
+}
+
+
+.message{
+    display: none;
+}
+
+.tweetinfo {
+    display: none !important;
+}
+
+
+@media (min-width: 500px){
+    .left{
+	float: left;
+    }
+}
+
+@media (max-width: 525px){
+    #counter{
+	display: none;
+    }
+}
+
+#tweetNum:hover,
+#favoNum:hover{
+    color: rgb( 42, 100, 150);
+}
+
+.media-body p:not(.tweetinfo){
+    word-wrap: break-word;
+}
