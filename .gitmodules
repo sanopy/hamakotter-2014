@@ -1,0 +1,3 @@
+[submodule "jQuery.iPreview"]
+	path = jQuery.iPreview
+	url = https://github.com/msng/jQuery.iPreview.git
